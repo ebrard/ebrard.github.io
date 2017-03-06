@@ -101,10 +101,10 @@ join with ETL_jobs_volume_monitoring. To avoid duplications, we need to filter t
 - `origin` is null (We want the job, not the components)
 - `message_type = 'end'` 
 
-Metrics (`duration` and `count`) will be aggregated by the reporting tool, a smart decision here is to select the average
+Metrics (`duration` and `count`) might be aggregated by the reporting tool, a smart decision here is to select the average
 function, just to be sure.
 
-In any case, to prevent the reporting solution from aggregating metrics, we need to add the the `pid` (Tableau internal) or the 
+In any case, to prevent it from aggregating metrics, we need to add the the `pid` (Talend internal) or the 
 `system_pid` to the dimensions we use. Both are unique (at least within a day).
 
 With all these in mind, it's quite straightforward to build an execution dashboard like this one:
