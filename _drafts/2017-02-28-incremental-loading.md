@@ -28,6 +28,7 @@ CREATE TABLE monitoring.etl_jobs_delta_loading
 {% endhighlight %}
 
 Along with this piece of information, we store:
+
 - **the name** of the Talend job, 
 - **the execution status** of the job (success or failure): if the job ends in failure, then the next execution needs to resume on the previously last timestamp (to re-run the failed integration). 
 - **the timestamp of the execution**
@@ -119,5 +120,8 @@ VALUES
 {% endhighlight %}
 
 We now have finished our meta job. To make it easily reusable, we could embedded in a joblet. Handling the meta-data generated about 7600 LOC (Talend meta included) and still no actual processing was done ! The advantage though is that this job is independent of the actual processing (which is performed in the _process_ branch) and of the target schema. 
+
+![Example of a incremental loading integration job](/images/incremental-load/incremental_load_first_run.png)
+
 
 This design is a good fit for non-complex integrations such as synchronization between systems with very few transformations (data type changes, simple look-up, RDBMS to NoSQL or vice-versa). It comes in handy when push CDC solutions are not available.

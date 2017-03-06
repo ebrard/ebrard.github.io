@@ -82,6 +82,7 @@ to a tFlowMeter as in this integration job part:
 ![Example of a job flow to tFlowMeter](/images/execution-dash/volume_example.png)
 
 I have established the following development conventions:
+
 - All source component (files, APIs, RDMS) flows should first go through a tFlowMeter with a custom label starting with the keyword
 _in_ and a short description of the source.
 
@@ -96,8 +97,9 @@ if on a particular execution, the label value `count` drops to zero, there is de
 The second convention helps dealing with data quality issues, early facts (or late dimensions), integration errors etc.
 
 We can now create a dashboard on these metrics with any reporting tool (example for Tableau). We want to blend both datasets into
-the same dashboard. A "simple" way to do so with Tableau is to create a datasource with ETL_jobs_execution_monitoring in a left
-join with ETL_jobs_volume_monitoring. To avoid duplications, we need to filter the ETL_jobs_execution_monitoring with:
+the same dashboard. A "simple" way to do so with Tableau is to create a datasource with `ETL_jobs_execution_monitoring` in a left
+join with `ETL_jobs_volume_monitoring`. To avoid duplications, we need to filter the `ETL_jobs_execution_monitoring` with:
+
 - `origin` is null (We want the job, not the components)
 - `message_type = 'end'` 
 
