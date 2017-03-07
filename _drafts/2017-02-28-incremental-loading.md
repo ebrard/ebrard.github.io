@@ -14,7 +14,7 @@ Incremental load is an integration technique in which only the created/modified 
 
 The idea is simple: the integration flow needs to persist the last "modification timestamp" processed, or it needs to be able to retrieve it back if the origin source system timestamp is transfered to the target. 
 
-In what follows, I have implemented the first solution. The last processed "modification timestamp" will be stored in the following table `etl_jobs_delta_loading` (SQL DDL for PostgreSQL). 
+In what follows, I have implemented the first solution (job screenshot at the end of the post). The last processed "modification timestamp" will be stored in the following table `etl_jobs_delta_loading` (SQL DDL for PostgreSQL). 
 
 {% highlight sql %}
 CREATE TABLE monitoring.etl_jobs_delta_loading
