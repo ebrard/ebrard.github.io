@@ -125,3 +125,5 @@ We now have finished our meta job. To make it easily reusable, we could embedded
 
 
 This design is a good fit for non-complex integrations such as synchronization between systems with very few transformations (data type changes, simple look-up, RDBMS to NoSQL or vice-versa). It comes in handy when push CDC solutions are not available.
+
+You can find the [complete job](https://github.com/ebrard/talend-examples/tree/master/incremental-load/PORTOFOLIO) in my github repository. It was designed for a PostGreSQL database.
