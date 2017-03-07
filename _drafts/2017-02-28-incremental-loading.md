@@ -30,7 +30,7 @@ CREATE TABLE monitoring.etl_jobs_delta_loading
 Along with this piece of information, we store:
 
 - **the name** of the Talend job, 
-- **the execution status** of the job (success or failure): if the job ends in failure, then the next execution needs to resume on the previously last timestamp (to re-run the failed integration). 
+- **the execution status** of the job (success or failure): if the job ends in failure, then the next execution needs to resume on the last timestamp (to re-run the failed integration). 
 - **the timestamp of the execution**
 
 The first step of the flow is to retrieve the last successfully integrated record timestamp (modification). To do so, we query our table:
@@ -45,7 +45,7 @@ and execution_status = 'success'
 group by job_name ;
 {% endhighlight %}
 
-We need to persist this information in the flow using the GlobalMap and the TSetGlobalVar component. GlobalMap is a simple in-memory key-value store implemented as: `java.util.HashMap<String, Object>`. We also store the execution time of the job.
+We need to persist this information in the flow using the GlobalMap and the tSetGlobalVar component. GlobalMap is a simple in-memory key-value store implemented as: `java.util.HashMap<String, Object>`. We also store the execution time of the job.
 
 {% highlight java %}
 // This is a hint code-snippet, not the actual component code 
@@ -63,18 +63,18 @@ if (globalMap.get("delta_date") == null) {
 }
 {% endhighlight %}
 
-If this is the first run, we set the initial delta date to "1990-01-01 00:00:01" (depends on requirements). We then use the `delta_date` to filter the origin source system. I have simulated a simple source with a tRowGenerator, and its filtering with a tFilterRow. If your source is a RDMS/NoSQL then you need to adapt the query and push the filtering down at the query level.
+If this is the first run, we set the initial delta date to "1990-01-01 00:00:01" (depends on requirements). We then use the `delta_date` to filter the source system. I have simulated a simple source with a `tRowGenerator`, and its filtering with a `tFilterRow`. If your source is a RDMS/NoSQL then you need to adapt the query and push the filtering down at the query level.
 
 The next step is to separate the flow into two branches. One of them will be used only to keep track of the "modification timestamp" of the record being processed (_to_agg_ branch). The other one will be used for the actual _useful_ processing.
 
-We use the _to_agg_ to find the last -- in source system time, not in processing time -- value of the "timestamp", basically the maximum value. We use a tAggregateRow with the `max` function on that field. You may think that this will be memory-intensive: aggregating all values in memory to find the maximum. But Talend implement it the smart way:
+We use the _to_agg_ to find the last -- in source system time, not in processing time -- value of the "timestamp", basically the maximum value. We use a `tAggregateRow` with the `max` function on that field. You may think that this will be memory-intensive: aggregating all values in memory to find the maximum. But Talend implements it the smart way:
 
 {% highlight java %}
 if (to_agg.updated_at != null) { // G_OutMain_AggR_546
 	if (
 	operation_result_tAggregateRow_1.updated_at_max == null
-			|| to_agg.updated_at
-					.compareTo(operation_result_tAggregateRow_1.updated_at_max) > 0
+		|| to_agg.updated_at
+			.compareTo(operation_result_tAggregateRow_1.updated_at_max) > 0
 	) {
 		operation_result_tAggregateRow_1.updated_at_max = to_agg.updated_at;
 	}
@@ -122,7 +122,6 @@ VALUES
 We now have finished our meta job. To make it easily reusable, we could embedded in a joblet. Handling the meta-data generated about 7600 LOC (Talend meta included) and still no actual processing was done ! The advantage though is that this job is independent of the actual processing (which is performed in the _process_ branch) and of the target schema. 
 
 ![Example of a incremental loading integration job](/images/incremental-load/incremental_load_first_run.png)
-
 
 This design is a good fit for non-complex integrations such as synchronization between systems with very few transformations (data type changes, simple look-up, RDBMS to NoSQL or vice-versa). It comes in handy when push CDC solutions are not available.
 
