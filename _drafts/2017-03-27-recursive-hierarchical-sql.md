@@ -7,8 +7,8 @@ excerpt_separator: <!--more-->
 ---
 
 "Hierarchical and recursive queries in SQL"... this is quite a hot topic, so hot that it has its own 
-[wikipedia entry](https://en.wikipedia.org/wiki/Hierarchical_and_recursive_queries_in_SQL). The typical example
-of its use case are employees, their managers and their hierarchy level.
+[wikipedia entry](https://en.wikipedia.org/wiki/Hierarchical_and_recursive_queries_in_SQL). The typical "hello world"
+is employees and managers.
 
 <!--more-->
 
@@ -42,10 +42,10 @@ VALUES
 This table contains both the employees information and their direct relationship. This way of storing information is 
 probably good enough for applicative usage, but it is clearly limited for exploration/analysis usage.
 
-The main idea behing a "hierarchical and recursive query" are 
+The main ideas behing a "hierarchical and recursive query" are 
 
-- to make sense of this hierarchy 
-- to be able to retrieve for each record (here employee), its parent (here manager) record information
+- make sense of the hierarchy 
+- be able to retrieve for each record (here employee), its parent (here manager) record information
 
 in a **single** (yet "quite" complex) query.
 
@@ -75,7 +75,7 @@ We want, using a single query the same information the wikipedia page provides (
 - the relative hierarchical position to the branch: the tree (presented as left padding)
 - the manager ~~id~~ name, the manager id would be too easy too retrieve from `@employees.parent_empno`
 
-The way to do it with Microsoft SQL Server dialect, TSQL, is to use a [CTE](https://msdn.microsoft.com/en-us/library/ms175972.aspx) (Common Table Expression) query.
+The way to do it with Microsoft SQL Server dialect -- T-SQL -- is to use a [CTE](https://msdn.microsoft.com/en-us/library/ms175972.aspx) (Common Table Expression) query:
 
 {% highlight sql %}
 WITH cte (empno, employee, manager, ordering, level) AS
@@ -104,7 +104,7 @@ SELECT
   replicate(' ',level) + employee as employee,
   case manager when employee then null else manager end as [direct manager]
 FROM cte
-  ORDER BY ordering, level ;
+  ORDER BY ordering ;
 {% endhighlight %}
 
 {% highlight text %}
@@ -126,4 +126,59 @@ FROM cte
 | 7934  | 2     |   MILLER | CLARK          |
 {% endhighlight %}
 
-The `level` part comes from a built-in feature and is understood by the parser/optimzer when parsing the query.
+The `level` part comes from a built-in feature and is understood by the parser/optimzer when parsing the query. The "tree" is constructed using the row_number() aggregating function. The basic idea is too build the hierarchy as a sorting-ready string field for examples: _KING_ is `1`, _JONES_ `1.1`, _SCOTT_ `1.1.1`, _ADAMS_ `1.1.1.1` whereare _FORD_ is `1.1.2` etc. We get the "direct manager" just by following the query relationship as `d.employee` where d is our `cte`. The only trick to add is in the last step: we don't need to know that KING is his own manager:
+
+{% highlight sql %}
+case manager when employee then null else manager end as [direct manager]
+{% endhighlight %}
+
+Let's now add a new head manager and a subordinate in the dataset:
+
+| empno  | employee  | parent_empno  | 
+|--------|-----------|---------------| 
+|  ...   | ...       |  ...          |
+|  8000  | HENRY     |  7839         |
+|  8001  | TOM       |  8000	     |
+
+The query behaves as expected, but we somehow lack one piece of information: the top manager. Let's add it to the query:
+
+{% highlight sql %}
+WITH cte (empno, employee, manager, ordering, level, top_manager) AS
+(
+  SELECT
+    empno,
+    employee,
+    employee as manager,
+    CAST(ROW_NUMBER() OVER (ORDER BY empno) as VARCHAR(MAX)) as ordering,
+    0            AS level,
+    employee AS top_manager
+  FROM @employees AS _root
+  WHERE parent_empno IS NULL
+  UNION ALL
+  SELECT
+    e.empno,
+    e.employee,
+    d.employee as manager,
+    d.ordering + '.' + CAST(ROW_NUMBER() OVER (PARTITION BY parent_empno ORDER BY e.empno) as VARCHAR(MAX)) as ordering,
+      level + 1,
+    top_manager
+  FROM @employees e
+    INNER JOIN cte AS d ON e.parent_empno = d.empno
+)
+SELECT
+  empno,
+  level,
+  replicate(' ',level) + employee as employee,
+  case manager when employee then null else manager end as [direct manager],
+  case top_manager
+    when employee then null
+    else top_manager
+  end as top_manager
+FROM cte
+  ORDER BY ordering, level ;
+{% endhighlight %}
+
+The `top_manager` also comes from a built-in feature, and we use the same trick to avoid displaying non-useful information.
+
+We have seen the typical example with an employees table but there are much more situations where the hierarchy between records is stored within the same table. A common example in the e-commerce business is credits granted to customers and their usage. For example, a customer is granted 100 USD that yields a record with `id=1, amount=+100, parent_id=null` in a table somewhere. The customer starts using 60 USD yielding a record with `id=6, amount=-60, parent_id=1` and then uses it
+again for 40 USD: `id=200, amount=-40, parent_id=6`. Now we can with a single query see the complete credit usage for the initial deposit _id=1_.
