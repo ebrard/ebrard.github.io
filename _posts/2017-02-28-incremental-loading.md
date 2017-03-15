@@ -2,6 +2,7 @@
 layout: post
 title:  "Incremental data loading with Talend"
 date:   2017-03-08 18:00:00
+meta_description: "This post describes a possible technical implementation of incremental data loading from source to target with the ETL tool Talend."
 categories:
   - ETL
   - Talend
