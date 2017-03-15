@@ -12,7 +12,7 @@ tags:
   - Python
 categories: 
   - ETL
-  - Workflow manager
+  - Workflow
 ---
 
 If you have used Informatica, or to some extent Talend Studio (that is, not the free version), you know that you can chain jobs together. Now, if you need to chain jobs which use diffent technologies, or if you need more than just linear chaining and dependencies, this is where a robust workflow manager comes in handy.
