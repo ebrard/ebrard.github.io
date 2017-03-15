@@ -2,7 +2,14 @@
 layout: post
 title:  "Incremental data loading with Talend"
 date:   2017-03-08 18:00:00
-categories: ETL
+categories:
+  - ETL
+  - Talend
+tags: 
+  - ETL
+  - Talend
+  - Integration
+  - Incremental
 excerpt_separator: <!--more-->
 ---
 
