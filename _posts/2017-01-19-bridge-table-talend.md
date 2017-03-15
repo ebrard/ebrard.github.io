@@ -2,7 +2,7 @@
 layout: post
 title:  "Implementing a bridge table with Talend"
 date:   2017-01-19 18:00:00
-summary: "This post describes how to build a bridge table with the ETL tool Talend to feed a multidimensional data model."
+meta_description: "This post describes how to build a bridge table with the ETL tool Talend to feed a multidimensional data model."
 categories: 
   - ETL
   - Talend
