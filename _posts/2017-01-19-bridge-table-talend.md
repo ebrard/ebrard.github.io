@@ -2,7 +2,15 @@
 layout: post
 title:  "Implementing a bridge table with Talend"
 date:   2017-01-19 18:00:00
-categories: ETL
+categories: 
+  - ETL
+  - Talend
+tags:
+  - ETL
+  - Talend
+  - Bridge Table
+  - Dimensional modeling
+  - Kimball
 excerpt_separator: <!--more-->
 ---
 
