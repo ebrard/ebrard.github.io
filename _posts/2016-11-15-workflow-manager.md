@@ -2,11 +2,20 @@
 layout: post
 title:  "Workflow manager"
 date:   2016-11-15 19:00:00
-categories: etl workflow
+meta_description: "This post describes the importance of having a good workflow manager (such as Luigi, Airflow...) when dealing with ETL or data integration. It goes through a simple implementation using Unix Bash, and a more advanced one using Python. It then presents the possible off-the-shelf solutions."
+tags:
+  - ETL
+  - Workflow manager
+  - Job manager
+  - auto-retry
+  - Bash
+  - Python
+categories: 
+  - ETL
+  - Workflow
 ---
 
 If you have used Informatica, or to some extent Talend Studio (that is, not the free version), you know that you can chain jobs together. Now, if you need to chain jobs which use diffent technologies, or if you need more than just linear chaining and dependencies, this is where a robust workflow manager comes in handy.
-
 
 # What's a workflow manager
 
