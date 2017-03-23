@@ -2,7 +2,17 @@
 layout: post
 title:  "Hierarchical and recursive queries in (T-)SQL"
 date:   2017-03-23 19:00:00
-categories: TSQL
+categories:
+  - SQL
+  - TSQL
+meta_description: This post describes the usage of T-SQL Common Table Expression (CTE) for hierarchical and recursive data queries in MS SQL Server.
+tags:
+  - SQL
+  - TSQL
+  - CTE
+  - Hierarchical
+  - Recursive
+  - Query
 excerpt_separator: <!--more-->
 ---
 
