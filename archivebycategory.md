@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Post by Category
+tags: browsecategory
 permalink: /categoryview/
 sitemap: false
 ---
