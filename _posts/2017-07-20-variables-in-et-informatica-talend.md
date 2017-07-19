@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Variables declaration ordering error in Informatica and Talend"
-date:   2017-07-29 18:00:00
+date:   2017-07-19 21:30:00
 meta_description: "This post explains the difference in Informatica and Talend with respect to variables declaration errors"
 categories: 
 - ETL
