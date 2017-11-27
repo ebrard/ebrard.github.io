@@ -46,7 +46,7 @@ for k, v in agg_data.items():
 
 Which gives as expected:
 
-{% highlight java %} 
+{% highlight text %} 
 1 Matt,Rocks
 2 Stylus
 3 Foo,Bar,Baz
@@ -113,7 +113,7 @@ With Talend, there are (at least) two ways to do it. Depending on your backgroun
 
 Giving the following input (randomly generated),
 
-{% highlight java %} 
+{% highlight text %} 
 .---+----------.
 |LogGeneratedData|
 |=--+---------=|
@@ -134,7 +134,7 @@ Giving the following input (randomly generated),
 
 Both the aggregation on list method
 
-{% highlight java %} 
+{% highlight text %} 
 .---+-----------------------.
 |     LogAggregatedData     |
 |=--+----------------------=|
@@ -150,7 +150,7 @@ Both the aggregation on list method
 
 or the denormalization will produce the same outputs:
 
-{% highlight java %} 
+{% highlight text %} 
 .---+-----------------------.
 |    LogDenormalizedData    |
 |=--+----------------------=|
