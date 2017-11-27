@@ -103,7 +103,7 @@ from records t
 group by k ;
 {% endhighlight %}
 
-Unfortunately, the same is true for ETL tools. Informatica (the market leader) has no built-in function for string aggregation and requires a workaround too (see here).
+Unfortunately, the same is true for ETL tools. Informatica (the market leader) has no built-in function for string aggregation and requires a workaround too.
 
 With Talend, there are (at least) two ways to do it. Depending on your background, you may find one of them more intuitive. In Talend, you can aggregate strings using the tAggregateRow transformation or the tDenormalize transformation. 
 
