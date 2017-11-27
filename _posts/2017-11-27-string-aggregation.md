@@ -1,3 +1,4 @@
+---
 layout: post
 title:  "String aggregation with databases and ETL tools"
 date:   2017-11-27
