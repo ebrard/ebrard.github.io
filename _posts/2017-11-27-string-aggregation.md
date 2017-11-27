@@ -103,13 +103,13 @@ from records t
 group by k ;
 {% endhighlight %}
 
+You can try all of these variations yourself with [sqlfiddle](http://sqlfiddle.com/).
+
 Unfortunately, the same is true for ETL tools. Informatica (the market leader) has no built-in function for string aggregation and requires a workaround too.
 
 With Talend, there are (at least) two ways to do it. Depending on your background, you may find one of them more intuitive. In Talend, you can aggregate strings using the tAggregateRow transformation or the tDenormalize transformation. 
 
-
 ![Example of a string aggregation with Talend](/images/string-aggregate/string_aggregate_job_talend.png)
-
 
 Giving the following input (randomly generated),
 
@@ -134,6 +134,8 @@ Giving the following input (randomly generated),
 
 Both the aggregation on list method
 
+![Example of a string aggregation with Talend and tAggregateRow](/images/string-aggregate/string_row_aggregate_talend.png)
+
 {% highlight text %} 
 .---+-----------------------.
 |     LogAggregatedData     |
@@ -148,7 +150,11 @@ Both the aggregation on list method
 '---+-----------------------'
 {% endhighlight %}
 
-or the denormalization will produce the same outputs:
+or the denormalization 
+
+![Example of a string aggregation with Talend and tAggregateRow](/images/string-aggregate/string_denormalize_talend.png)
+
+will produce the same outputs:
 
 {% highlight text %} 
 .---+-----------------------.
@@ -164,3 +170,4 @@ or the denormalization will produce the same outputs:
 '---+-----------------------'
 {% endhighlight %}
 
+When you need to perform a string aggregation, you have multiple choices. You can do it in the database if your database supports it or using an ETL tool for example. Talend offers ready to use built-in functions which is not the case of all vendors.
