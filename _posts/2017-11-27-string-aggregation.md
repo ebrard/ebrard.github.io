@@ -4,10 +4,10 @@ title:  "String aggregation with databases and ETL tools"
 date:   2017-11-27
 meta_description: "String aggregations with Postgres, MS SQL, Talend and Informatica, a naive implementation in Python"
 categories: 
-  - data engineer
+  - transformations
+tags:
   - etl
   - databases
-tags:
   - postgres
   - ms sql server
   - sql
